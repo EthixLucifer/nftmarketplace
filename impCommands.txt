@@ -1,0 +1,8 @@
+const hardhat = hre.ethers.providers.JsonRpcProvider("rpcUrl");
+hardhat.ethers.provider.getBlock("latest");
+
+
+
+//for live networks promises are used.
+const polygon = new ethers.providers.JsonRpcProvider("polygonRpcUrl");
+await polygon.getBlock("latest");
