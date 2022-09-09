@@ -1,7 +1,20 @@
-import '../styles/globals.css'
+// import '../styles/globals.css'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import { NextUIProvider } from "@nextui-org/react";
+import Fonts from "../components/Fonts";
+import theme from "../components/theme";
+import styles from '../styles/globals.css'
+
+
+function Web3Marketplace({ Component, pageProps }) {
+  return (
+
+    <NextUIProvider theme= {theme}>
+      <Fonts />
+      
+      <Component {...pageProps} />
+    </NextUIProvider>
+  );
 }
 
-export default MyApp
+export default Web3Marketplace;

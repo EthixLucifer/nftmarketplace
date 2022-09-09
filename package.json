@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/styled": "^11.10.4",
     "@metamask/detect-provider": "^1.2.0",
     "@nextui-org/react": "^1.0.0-beta.10",
     "axios": "^0.27.2",
@@ -31,12 +32,15 @@
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
+    "autoprefixer": "^10.4.8",
     "chai": "^4.3.6",
     "eslint": "8.23.0",
     "eslint-config-next": "12.2.5",
     "ethers": "^5.7.0",
     "hardhat-gas-reporter": "^1.0.8",
+    "postcss": "^8.4.16",
     "solidity-coverage": "^0.7.21",
+    "tailwindcss": "^3.1.8",
     "typechain": "^8.1.0"
   }
 }
