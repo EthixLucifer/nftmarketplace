@@ -1,14 +1,17 @@
 import { Navbar, Button, Link, Text, Image, Card, Radio, Container, Row, Col } from "@nextui-org/react";
+const navbarElements = " h-8 hover:bg-cyan-100 hover:outline-cyan-700 rounded-sm hover:border";
 
 const NavbarCustom = () => {
     return (
-        <Container sm className="mt-1">
-            <Navbar isCompact="true" isBordered className="">
+        <Container sm className="mt-1 font-cormorant font-extrabold">
+            <Navbar disableShadow="true" isCompact="false" isBordered="true" variant={"floating"} borderWeight={"normal"}
+                className="rounded-sm"
+            >
 
-                <Navbar.Brand className="pr-4">
+                <Navbar.Brand className=" ">
                     <Image src="/chitra.png"
-                        width={40}
-                        height={40}
+                        width={50}
+                        height={50}
                     />
                     <Text h1
                         weight="semibold"
@@ -21,28 +24,41 @@ const NavbarCustom = () => {
                     </Text>
                 </Navbar.Brand>
 
-                <Navbar.Content hideIn={"sm"} >
 
-                    <Navbar.Link href="/Marketplace">
+
+                <Navbar.Content className=""  >
+
+
+                    <Navbar.Link
+                        href="/Marketplace" className={navbarElements}>
                         Marketplace
                     </Navbar.Link>
 
-                    <Navbar.Link href="/Collections">
+
+                </Navbar.Content>
+                <Navbar.Content>
+                    <Navbar.Link href="/Collections" className={navbarElements}>
                         Collections
                     </Navbar.Link>
-                    <Navbar.Link href="/myNFT">
+
+                </Navbar.Content>
+                <Navbar.Content>
+                    <Navbar.Link href="/myNFT" className={navbarElements}>
                         My NFT's
                     </Navbar.Link>
 
                 </Navbar.Content>
-
-                <Button bordered color="secondary" auto size={"sm"}>
+                {/* <Button shadow bordered color="warning" auto size={"sm"}
+                className="rounded-sm"
+                >
                     Sign Up
                 </Button>
 
-                <Button bordered color="success" auto size={"sm"} >
+                <Button shadow bordered color="success" auto size={"sm"} 
+                className="rounded-sm"
+                >
                     Login
-                </Button>
+                </Button> */}
 
             </Navbar>
         </Container>

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+    font-family: "CORMORANT";
+    src: url("../public/Fonts/cormorant-sc/CormorantSC-Regular.ttf");
+  }

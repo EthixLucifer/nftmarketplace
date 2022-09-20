@@ -7,7 +7,7 @@ import Fonts from '../components/Fonts';
 
 export default function Home() {
   return (
-    <Container >
+    <Container className="font-cormorant" >
 
       <Head >
         <title>Nft Marketplace</title>
