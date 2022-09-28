@@ -10,7 +10,7 @@ function Web3Marketplace({ Component, pageProps }) {
   return (
 
     <NextUIProvider theme= {theme}>
-      <Fonts />
+      
       
       <Component {...pageProps} />
     </NextUIProvider>

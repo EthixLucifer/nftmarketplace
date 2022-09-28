@@ -191,7 +191,7 @@ export default function Sell() {
             </Grid.Container>
             <Grid.Container className=" mt-1  ">
                 {nft.map((nfts, i) => {
-                    var owner = user;
+                    let owner = user;
                     if (owner.indexOf(nfts.wallet) !== -1) {
                         async function executeRelist() {
                             const { price } = resalePrice;
@@ -211,7 +211,7 @@ export default function Sell() {
                             const signer = provider.getSigner();
                             const price = ethers.utils.parseUnits(resalePrice.price, 'ether');
                             const contractNFT = new ethers.Contract(hhNFTCollectionContract, NFTCollectionABI, signer);
-                            await contractNFT.setApprovallForAll(hhNFTResell, true);
+                            await contractNFT.setApprovalForAll(hhNFTResell, true);
                             let contractResell = new ethers.Contract(hhNFTResell, resellNFTABI, signer);
                             let listingFees = await contractResell.getlistingFee();
                             listingFees = listingFees.toString();
@@ -226,13 +226,14 @@ export default function Sell() {
                                 isHoverable
                                 // isPressable
                                 borderWeight="extrabold"
-                                className="  w-1/4 h-1/5 rounded-lg ml-auto mr-auto mt-11 border-slate-100 border-spacing-4 bg-gradient-to-r from-sky-500 to-indigo-300">
+                                className="  w-1/5 h-1/5 rounded-lg ml-auto mr-auto mt-11 border-slate-100 border-spacing-4 bg-gradient-to-r from-sky-500 to-indigo-300">
                                 <Card.Header className="p-2 ">
                                     <Row>
-                                        <Text className="z-10 font-cormorant  text-white font-thin">
+                                        <Text className=" font-cormorant  text-white font-thin">
                                             {nfts.name}
                                         </Text>
                                     </Row>
+                                    <Text className='text-white font-bold'> {nfts.tokenId}</Text>
                                 </Card.Header>
                                 <Card.Divider />
                                 <Card.Body>
@@ -259,7 +260,7 @@ export default function Sell() {
                                         <Input
                                             rounded
                                             bordered
-                                            placeholder="Price in Eth"
+                                            placeholder="Wei "
                                             color="error"
                                             size="xs" className="mt-0.5 font-extrabold border-white"
                                             onChange={e => setresalePrice({ ...resalePrice, price: e.target.value })}
@@ -271,7 +272,7 @@ export default function Sell() {
                                             color={"error"}
                                             className="ml-2 rounded-sm"
                                             onPress={executeRelist}
-                                            
+
                                         >
                                             Relist NFT
                                         </Button>
