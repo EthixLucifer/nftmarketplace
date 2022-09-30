@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { useState, useEffect } from "react";
 import Web3Modal from "web3modal";
 import { useRouter } from "next/router";
-import { Text, Card, Container, Grid, Button, Row, Image, Col, Textarea, Input } from "@nextui-org/react";
+import { Text, Card, Container, Grid, Button, Row, Image, Col, Modal, Input, Popover } from "@nextui-org/react";
 import axios from "axios";
 import Web3 from "web3"
 import { hhNFTResell, hhNFTCollectionContract, hhRpc, simpleCrypto, encryptedHardHat } from "../components/configuration";
@@ -19,6 +19,7 @@ export default function Sell() {
     const [resalePrice, setresalePrice] = useState({ price: '' })
     const [nft, setnft] = useState([]);
     const [loadingState, setloadingState] = useState("true");
+    const [uiModal, setuiModal] = useState(false);
     const router = useRouter();
     useEffect(() => {
 
@@ -62,6 +63,9 @@ export default function Sell() {
             contract.totalSupply().then(result => {
 
                 let totalSup = parseInt(result, 16);
+
+                console.log("Total result is", result);
+                console.log("Total supply is", totalSup);
 
                 for (let i = 0; i < totalSup; i++) {
 
@@ -129,7 +133,7 @@ export default function Sell() {
 
     if (loadingState === "false" && !nft.length)
         return (
-            <Container>
+            <Container className="">
                 <NavbarCustom />
                 <Grid.Container className="justify-center pt-2" >
                     <Grid>
@@ -167,13 +171,16 @@ export default function Sell() {
 
     return (
 
-        <Container md >
+        <Container xl className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-md pb-5">
+            {/* bg-[url('/imagename')] */}
             <NavbarCustom />
             <Grid.Container className="justify-center pt-2" >
                 <Grid>
 
-                    <Card isHoverable variant="bordered" className=" rounded-md p-2 font-cormorant font-bold ">
-                        <Card.Header className="justify-center flex-1">
+                    <Card isHoverable variant="flat"
+                        isPressable
+                        className=" rounded-md p-1 pb-2 font-cormorant font-bold border-amber-700 z-0 bg-gradient-to-r from-slate-500 to-yellow-100">
+                        <Card.Header className="justify-center flex-1 z-10">
                             {user}
                         </Card.Header>
 
@@ -196,6 +203,12 @@ export default function Sell() {
                         async function executeRelist() {
                             const { price } = resalePrice;
                             if (!price) { return }
+
+                            //checks in the price of the input is a Nan
+                            else if (isNaN(price)) {
+                                console.log("Input tag in the pricing section is a Non Addressable Number :::::> -_- ", price);
+                                setuiModal(true);
+                            }
                             try {
                                 relistNFT()
                             }
@@ -204,20 +217,31 @@ export default function Sell() {
 
                         }
                         async function relistNFT() {
-
-                            const web3modal = new Web3Modal();
-                            const connection = await web3modal.connect();
-                            const provider = new ethers.providers.Web3Provider(connection);
-                            const signer = provider.getSigner();
-                            const price = ethers.utils.parseUnits(resalePrice.price, 'ether');
-                            const contractNFT = new ethers.Contract(hhNFTCollectionContract, NFTCollectionABI, signer);
-                            await contractNFT.setApprovalForAll(hhNFTResell, true);
-                            let contractResell = new ethers.Contract(hhNFTResell, resellNFTABI, signer);
-                            let listingFees = await contractResell.getlistingFee();
-                            listingFees = listingFees.toString();
-                            let transaction = await contractResell.listNftSale(nfts.tokenId, price, { value: listingFees });
-                            await transaction.wait();
-                            router.push('/');
+                            try {
+                                const web3modal = new Web3Modal();
+                                const connection = await web3modal.connect();
+                                const provider = new ethers.providers.Web3Provider(connection);
+                                const signer = provider.getSigner();
+                                const price = ethers.utils.parseUnits(resalePrice.price, 'ether');
+                                const contractNFT = new ethers.Contract(hhNFTCollectionContract, NFTCollectionABI, signer);
+                                await contractNFT.setApprovalForAll(hhNFTResell, true);
+                                let contractResell = new ethers.Contract(hhNFTResell, resellNFTABI, signer);
+                                let listingFees = await contractResell.getlistingFee();
+                                listingFees = listingFees.toString();
+                                let transaction = await contractResell.listNftSale(nfts.tokenId, price, { value: listingFees });
+                                await transaction.wait();
+                                router.push('/');
+                            }
+                            catch (error) {
+                                <Popover>
+                                    <Popover.Trigger>
+                                        {console.log("error is ::>", error)}
+                                    </Popover.Trigger>
+                                    <Popover.Content>
+                                        <Text css={{ p: "$10" }}>{error}</Text>
+                                    </Popover.Content>
+                                </Popover>
+                            }
                         }
                         return (
 
@@ -226,7 +250,7 @@ export default function Sell() {
                                 isHoverable
                                 // isPressable
                                 borderWeight="extrabold"
-                                className="  w-1/5 h-1/5 rounded-lg ml-auto mr-auto mt-11 border-slate-100 border-spacing-4 bg-gradient-to-r from-sky-500 to-indigo-300">
+                                className="  w-1/5 h-1/5 rounded-lg ml-auto mr-auto mt-11 border-slate-100 border-spacing-4 bg-gradient-to-tl from-gray-400 via-gray-600 to-blue-800">
                                 <Card.Header className="p-2 ">
                                     <Row>
                                         <Text className=" font-cormorant  text-white font-thin">
@@ -260,7 +284,7 @@ export default function Sell() {
                                         <Input
                                             rounded
                                             bordered
-                                            placeholder="Wei "
+                                            placeholder="Ether"
                                             color="error"
                                             size="xs" className="mt-0.5 font-extrabold border-white"
                                             onChange={e => setresalePrice({ ...resalePrice, price: e.target.value })}
@@ -282,11 +306,42 @@ export default function Sell() {
 
 
 
+
                         );
                     }
                 })}
             </Grid.Container>
-
+            <Modal
+                closeButton
+                aria-labelledby="modal-title"
+                open={uiModal}
+                onClose={()=>setuiModal(false)}
+            >
+                <Modal.Header>
+                    <Text id="modal-title" size={18}>
+                        Welcome to
+                    </Text>
+                        <Text b size={18}>
+                           🧐 IMAGICA
+                        </Text>
+                </Modal.Header>
+                <Modal.Body>
+                   
+                    <Input
+                        readOnly
+                        bordered
+                        fullWidth
+                        color="primary"
+                        size="lg"
+                        placeholder="Password"
+                    initialValue="Set Value of Relisting Nft in Ethers only"
+                    />
+                    
+                </Modal.Body>
+                <Modal.Footer>
+                   <Text>Dear User😃 or Potential Recruiter 😇 Please, Just Put Numbers in the Input Field </Text>
+                </Modal.Footer>
+            </Modal>
 
         </Container>
     );

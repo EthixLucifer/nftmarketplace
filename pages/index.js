@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Web3Modal from "web3modal";
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { Grid, Card, Text, Button, Row, Spacer, Container, Input, Col } from '@nextui-org/react';
 import { simpleCrypto, encryptedHardHat } from '../components/configuration';
 import NFTCollectionABI from "../components/ABI/NFTCollection.json"
@@ -13,7 +13,7 @@ import { hhRpc } from '../components/configuration';
 import { hhNFTCollectionContract } from '../components/configuration';
 import { hhNFTResell } from '../components/configuration';
 import NavbarCustom from '../components/Navbar';
-
+import Navbar1 from '../components/Navbar1';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
@@ -34,6 +34,9 @@ const responsive = {
     slidesToSlide: 1 // optional, default to 1.
   }
 };
+
+
+
 
 
 
@@ -98,73 +101,233 @@ export default function Home() {
   }
 
   return (
+    <Container xl className='bg-gradient-to-t from-blue-400 via-purple-500 to-slate-900'>
+    <div className=''>
+      <div className=''>
+        <Container xl className=''>
+          <NavbarCustom />
+          {/* <Navbar1 /> */}
+          <Container sm className=' mt-2.5 mb-2.5 '>
+            <Text
+             h1
+             size={60}
+             css={{
+               textGradient: "45deg, $purple600 -20%, $pink600 100%",
+             }}
+             weight="bold"
+              className='font-cormorant  justify-center flex '
+            >
+              Latest Nft's Listed For Sale
+            </Text>
+            <Carousel className='bg-conic-to-t from-gray-900 via-gray-100 to-gray-900 rounded-xl pt-2 flex justify-evenly bg-opacity-50 '
+              swipeable={true}
+              draggable={false}
+              showDots={true}
+              responsive={responsive}
+              ssr={true}
+              infinite={true}
+              autoPlay={true}
+              autoPlaySpeed={4005}
+              keyBoardControl={true}
+              customTransition="all .5"
+              transitionDuration={3000}
+              containerClass="carousel-container"
+              removeArrowOnDeviceType={["tablet", "mobile"]}
+              dotListClass="custom-dot-list-style"
+              itemClass="carousel-item-padding-60-px"
+            >
 
-    <Container md>
-      <NavbarCustom />
-      <Row>
-        {
-          hhNFTList.map((nft, i) => (
-            <Grid.Container gap={2} justify="flex-start">
+              {
+                hhNFTList.map((nft, i) => (
 
-              <Grid  >
-                <Card variant="flat"
-                  isHoverable
-                  isPressable
-                  borderWeight="extrabold"
-                  className="  w-1/3   rounded-lg ml-auto mr-auto mt-11 border-slate-50 border-spacing-4 bg-gradient-to-r from-emerald-500 to-red-200">
-                  <Card.Header className="p-2">
-                    <Row>
-                      <Text className=" font-cormorant  text-white font-thin">
-                        {nft.name}
-                      </Text>
-
-                    </Row>
-                    <Text className='text-white font-bold'> {nft.tokenId}</Text>
-                  </Card.Header>
-                  <Card.Divider />
-                  <Card.Body>
+                  <div>
                     <Card.Image
+                      css={{ marginLeft: '$1', maxWidth: '500px' }}
+                      key={i}
+                      src={nft.image}
+                      className="justify-center flex-1 ml-5 mr-5 rounded-sm"
+                    />
 
-                      src={nft.image} />
-                    <Card.Divider className="mt-4" />
-                    <Text className="text-white font-thin font-cormorant">
-                      {nft.description}
-                    </Text>
+                  </div>
+                ))
+              }
 
-                    <Card.Divider />
-                    <Row className="pt-2 ">
+            </Carousel >
 
-                      <Input
-                        readOnly
-                        color="error"
-                        size="xs"
-                        initialValue={nft.price}
+          </Container>
+        </Container>
+      </div>
+      <Container xl>
+        <Grid.Container>
+          <Row>
 
-                      />
+            {
+              hhNFTList.slice(0, 9).map((nft, i) => {
+                async function buyListedNFT() {
+                  try {
+                    const web3modal = new Web3Modal();
+                    const connection = await web3modal.connect();
+                    const provider = new ethers.providers.Web3Provider(connection);
+                    const signer = provider.getSigner();
+                    const nftResellContract = new ethers.Contract(hhNFTResell, NFTresellABI, signer);
+                    const listedNftPrice = ethers.utils.parseUnits(nft.price, 'ether');
+                    const transaction = await nftResellContract.buyNft(nft.tokenId, { value: listedNftPrice })
+                    await transaction.wait();
+                    console.log("Transaction Receipt ", transaction);
 
-                      <Button
-                        bordered
-                        size={"xs"}
-                        color={"error"}
-                        className="ml-2 rounded-sm"
-                      // onPress={executeRelist}
-
-                      >
-                        Buy NFT
-                      </Button>
-                    </Row>
-                  </Card.Body>
-                </Card>
-
-
-
-              </Grid>
+                  }
+                  catch (error) {
+                    console.log("-_- Error occured :::::> ", error);
+                  }
 
 
-            </Grid.Container>
-          ))
-        }
-      </Row>
+                }
+                return (
+
+
+                  <Container md className='flex justify-center  pb-1 ' >
+                    <Grid xs={5}>
+                      <Card variant="flat"
+                        isHoverable
+                        isPressable
+                        borderWeight="extrabold"
+                        key={i}
+                        className="  rounded-lg ml-auto mr-auto mt-11 max-w-xs border-slate-50 border-spacing-4 flex justify-between Pastel bg-gradient-to-bl from-indigo-900 via-indigo-400 to-indigo-900 ">
+                        <Card.Header className="p-2">
+                          <Row>
+                            <Text className=" font-cormorant  text-white font-thin">
+                              {nft.name}
+                            </Text>
+
+                          </Row>
+                          <Text className='text-white font-bold'> {nft.tokenId}</Text>
+                        </Card.Header>
+                        <Card.Divider />
+                        <Card.Body>
+                          <Card.Image
+
+                            src={nft.image}
+
+
+                          />
+                          <Card.Divider className="mt-4" />
+                          <Text className="text-white font-thin font-cormorant">
+                            {nft.description}
+                          </Text>
+
+                          <Card.Divider />
+                          <Row className="pt-2 ">
+
+                            <Input
+                              readOnly
+                              color="error"
+                              size="xs"
+                              initialValue={nft.price}
+
+                            />
+
+                            <Button
+                              bordered
+                              size={"xs"}
+                              color={"secondary"}
+                              className="ml-2 rounded-sm"
+                              onPress={buyListedNFT}
+
+                            >
+                              Buy NFT
+                            </Button>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+
+                    </Grid>
+
+                  </Container>
+
+
+
+                )
+              })
+            }
+          </Row>
+        </Grid.Container>
+      </Container>
+    </div>
     </Container>
   );
 }
+
+
+
+
+
+
+
+
+/* 
+<Row>
+          {
+            hhNFTList.map((nft, i) => (
+              <Grid.Container gap={2} justify="flex-start">
+
+                <Grid  >
+                  <Card variant="flat"
+                    isHoverable
+                    isPressable
+                    borderWeight="extrabold"
+                    className="  w-1/3   rounded-lg ml-auto mr-auto mt-11 border-slate-50 border-spacing-4 bg-gradient-to-r from-emerald-500 to-red-200">
+                    <Card.Header className="p-2">
+                      <Row>
+                        <Text className=" font-cormorant  text-white font-thin">
+                          {nft.name}
+                        </Text>
+
+                      </Row>
+                      <Text className='text-white font-bold'> {nft.tokenId}</Text>
+                    </Card.Header>
+                    <Card.Divider />
+                    <Card.Body>
+                      <Card.Image
+
+                        src={nft.image} />
+                      <Card.Divider className="mt-4" />
+                      <Text className="text-white font-thin font-cormorant">
+                        {nft.description}
+                      </Text>
+
+                      <Card.Divider />
+                      <Row className="pt-2 ">
+
+                        <Input
+                          readOnly
+                          color="error"
+                          size="xs"
+                          initialValue={nft.price}
+
+                        />
+
+                        <Button
+                          bordered
+                          size={"xs"}
+                          color={"error"}
+                          className="ml-2 rounded-sm"
+                        // onPress={executeRelist}
+
+                        >
+                          Buy NFT
+                        </Button>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+
+
+
+                </Grid>
+
+
+              </Grid.Container>
+            ))
+          }
+        </Row>
+
+*/
