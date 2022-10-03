@@ -1,21 +1,27 @@
 import { Navbar, Button, Link, Text, Image, Card, Radio, Container, Row, Col } from "@nextui-org/react";
 const navbarElements = " h-8 hover:bg-cyan-100 hover:outline-cyan-700 rounded-sm hover:border flex-shrink";
+import {useRouter}  from "next/router";
 
 const NavbarCustom = () => {
+    
     return (
-        <Container sm className="mt-1 font-cormorant font-extrabold">
+        <Container md className="text-xl font-extrabold pb-1">
             <Container className=" ">
-                <Navbar disableShadow="true" isCompact="false" isBordered="true" variant={"floating"} borderWeight={"normal"}
-                    className="rounded-sm "
+                <Navbar shouldHideOnScroll disableShadow="true" isCompact="false" isBordered="false" variant={"floating"} borderWeight={"light"}
+                    className="rounded-sm border-transparent  "
                 >
-                    <Navbar.Content className="flex justify-evenly ">
+                    <Navbar.Brand>
+
+                        <Image src="/chitra1.png"
+
+                            // href="./"
+                            className="h-32 w-32"
+                          
+                        />
+                    </Navbar.Brand>
+                    <Navbar.Content className="flex justify-center ">
                         <Navbar.Content   >
 
-                            <Image src="/chitra1.png"
-
-                                // href="./"
-                                className="h-32 w-32"
-                            />
                         </Navbar.Content >
 
                         <Navbar.Content >
@@ -41,7 +47,7 @@ const NavbarCustom = () => {
 
                         <Navbar.Content>
                             <Navbar.Link href="/mintNft" className={navbarElements}>
-                                Mint New NFT's
+                                Mint  NFT
                             </Navbar.Link>
                         </Navbar.Content>
 
