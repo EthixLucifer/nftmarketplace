@@ -18,7 +18,7 @@
 # misc
 .DS_Store
 *.pem
-/components/configuration.js
+components/configuration.js
 
 # debug
 npm-debug.log*
