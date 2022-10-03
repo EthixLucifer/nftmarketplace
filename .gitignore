@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+/components/configuration.js
+
+
 # dependencies
 /node_modules
 /.pnp
@@ -18,7 +21,6 @@
 # misc
 .DS_Store
 *.pem
-components/configuration.js
 
 # debug
 npm-debug.log*
