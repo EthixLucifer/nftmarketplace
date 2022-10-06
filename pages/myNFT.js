@@ -50,7 +50,7 @@ export default function Sell() {
 
 
 
-  
+
 
     async function getCreatedNft() {
         const provider = new ethers.providers.JsonRpcProvider(hhRpc);
@@ -88,26 +88,33 @@ export default function Sell() {
                 })
                 console.log("GETURI ", getUri)
                 getUri.then(value => {
-                    let rawImage = value.data.image;
-                    let name = value.data.name;
-                    let description = value.data.description;
-                    let price = value.data.price;
-                    let image = rawImage.replace("ipfs://", "https://ipfs.io/ipfs/");
-                    Promise.resolve(owner).then(value => {
-                        let owner = value;
-                        let meta = {
-                            name: name,
-                            tokenId: tokenId,
-                            image: image,
-                            price: price,
-                            description: description,
-                            owner: owner
+                    try {
+                        let rawImage = value.data.image;
+                        let name = value.data.name;
+                        let description = value.data.description;
+                        let price = value.data.price;
+                        let image = rawImage.replace("ipfs://", "https://ipfs.io/ipfs/");
+                        Promise.resolve(owner).then(value => {
+                            let owner = value;
+                            let meta = {
+                                name: name,
+                                tokenId: tokenId,
+                                image: image,
+                                price: price,
+                                description: description,
+                                owner: owner
 
-                        }
-                        console.log("Logging Meta Variable of the CreatNFT function for token Id", tokenId, "=====>", meta, "<========");
-                        itemArray.push(meta);
-                    })
-                })
+                            }
+                            console.log("Logging Meta Variable of the CreatNFT function for token Id", tokenId, "=====>", meta, "<========");
+                            itemArray.push(meta);
+                        })
+                    }
+
+                    catch(error){
+                        console.log("Error is the Following ", error);
+                    }
+        
+        })
             }
         })
 
@@ -183,7 +190,7 @@ export default function Sell() {
                         </Card>
                     </Grid>
                 </Grid.Container>
-               
+
 
 
                 {/* describes nfts minted from the platform  */}

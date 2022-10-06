@@ -86,6 +86,7 @@ export default function Home() {
             image: image,
             name: value.data.name,
             description: value.data.description,
+            seller:i.seller,
           };
           itemArray.push(item);
           console.log("Image URL", item.image)
@@ -226,77 +227,77 @@ export default function Home() {
                 return (
 
 
-                  // <Container xl className='flex justify-center  pb-1 ' >
-                  <Grid xs={3}>
-                    <Card variant="flat"
-                      isHoverable
-                      isPressable
-                      borderWeight="extrabold"
-                      key={i}
-                      className=" rounded-lg ml-auto mr-auto mt-11 pr-2 border-slate-50 border-spacing-4 flex justify-between flex-grow flex-shrink-0 Pastel bg-gradient-to-bl from-indigo-200 via-indigo-400 to-indigo-900 ">
-                      <Card.Header className="p-2 flex justify-evenly mt">
-                        <Row>
-                          <Text className=" font-cormorant  text-white font-thin">
-                            {nft.name}
-                          </Text>
+                  <Container lg className='flex justify-center  pb-1 ' >
+                    <Grid lg={3}>
+                      <Card variant="flat"
+                        isHoverable
+                        isPressable
+                        borderWeight="extrabold"
+                        key={i}
+                        className=" rounded-lg ml-auto mr-auto mt-11 pr-2 border-slate-50 border-spacing-4 flex justify-between flex-grow flex-shrink-0 Pastel bg-gradient-to-bl from-indigo-200 via-indigo-400 to-indigo-900 ">
+                        <Card.Header className="p-2 flex justify-center mt">
+                          <Row>
+                            <Text className=" font-cormorant  text-white font-thin">
+                              {nft.name}
+                            </Text>
 
-                        </Row>
-
-
-                      </Card.Header>
-                      <Card.Divider />
-                      <Card.Body>
-                        <Card.Image
-
-                          src={nft.image}
+                          </Row>
 
 
-                        />
-                        <Card.Divider className="mt-4" />
-                        <Text className="text-white font-thin font-cormorant">
-                          {nft.description}
-                        </Text>
-
+                        </Card.Header>
                         <Card.Divider />
-                        <Row className="flex justify-center max-w-xs">
+                        <Card.Body>
+                          <Card.Image
 
-                          <Text className='font-bold text-white'>
-                            {nft.price} Eth
+                            src={nft.image}
+
+
+                          />
+                          <Card.Divider className="mt-4" />
+                          <Text className="text-white font-thin font-cormorant">
+                            {nft.description}
                           </Text>
-                          <Spacer>
 
-                          </Spacer>
-                          <Spacer>
+                          <Card.Divider />
+                          <Row className="flex justify-center max-w-xs">
 
-                          </Spacer>
-                          <Spacer>
+                            <Text className='font-bold text-white'>
+                              {nft.price} Eth
+                            </Text>
+                            <Spacer>
 
-                          </Spacer>
-                          <Text className='text-white font-bold'>{nft.tokenId}</Text>
-                        </Row>
+                            </Spacer>
+                            <Spacer>
 
-                        <Row className="pt-2 flex justify-center ">
+                            </Spacer>
+                            <Spacer>
 
-                          <Button
-                            bordered
-                            size={"xs"}
-                            color={"success"}
-                            className="ml-2 rounded-sm"
-                            onPress={buyListedNFT}
+                            </Spacer>
+                            <Text className='text-white font-bold'>ID {nft.tokenId}</Text>
+                          </Row>
 
-                          >
-                            Buy NFT
-                          </Button>
-                        </Row>
-                      </Card.Body>
-                    </Card>
+                          <Row className="pt-2 flex justify-center ">
 
-                  </Grid>
+                            <Button
+                              bordered
+                              size={"xs"}
+                              color={"success"}
+                              className="ml-2 rounded-sm"
+                              onPress={buyListedNFT}
+
+                            >
+                              Buy NFT
+                            </Button>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+
+                    </Grid>
 
 
 
 
-                  // </Container>
+                  </Container>
 
 
 
@@ -312,77 +313,3 @@ export default function Home() {
   );
 }
 
-
-
-
-
-
-
-
-/* 
-<Row>
-          {
-            hhNFTList.map((nft, i) => (
-              <Grid.Container gap={2} justify="flex-start">
-
-                <Grid  >
-                  <Card variant="flat"
-                    isHoverable
-                    isPressable
-                    borderWeight="extrabold"
-                    className="  w-1/3   rounded-lg ml-auto mr-auto mt-11 border-slate-50 border-spacing-4 bg-gradient-to-r from-emerald-500 to-red-200">
-                    <Card.Header className="p-2">
-                      <Row>
-                        <Text className=" font-cormorant  text-white font-thin">
-                          {nft.name}
-                        </Text>
-
-                      </Row>
-                      <Text className='text-white font-bold'> {nft.tokenId}</Text>
-                    </Card.Header>
-                    <Card.Divider />
-                    <Card.Body>
-                      <Card.Image
-
-                        src={nft.image} />
-                      <Card.Divider className="mt-4" />
-                      <Text className="text-white font-thin font-cormorant">
-                        {nft.description}
-                      </Text>
-
-                      <Card.Divider />
-                      <Row className="pt-2 ">
-
-                        <Input
-                          readOnly
-                          color="error"
-                          size="xs"
-                          initialValue={nft.price}
-
-                        />
-
-                        <Button
-                          bordered
-                          size={"xs"}
-                          color={"error"}
-                          className="ml-2 rounded-sm"
-                        // onPress={executeRelist}
-
-                        >
-                          Buy NFT
-                        </Button>
-                      </Row>
-                    </Card.Body>
-                  </Card>
-
-
-
-                </Grid>
-
-
-              </Grid.Container>
-            ))
-          }
-        </Row>
-
-*/
