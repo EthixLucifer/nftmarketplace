@@ -49,7 +49,7 @@ export default function createNft() {
         })
 
         try {
-            const added = ipfsClient.add(data);
+            const added = await ipfsClient.add(data);
             const url = `https://infura-ipfs.io/ipfs/${added.path}`;
             mintNFT(url);
         }
