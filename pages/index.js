@@ -215,6 +215,7 @@ export default function Home() {
                     const transaction = await ImagicaMarketContract.ImagicabuyNft(hhMintNftContract, itemId, { value: listedNftPrice })
                     await transaction.wait();
                     console.log("Transaction Receipt ", transaction);
+                    await new Promise((r) => setTimeout(r, 3300));
                     router.push("/")
 
                   }
@@ -227,14 +228,14 @@ export default function Home() {
                 return (
 
 
-                  <Container lg className='flex justify-center  pb-1 ' >
+                  <Container  className='flex justify-center  pb-1 ' >
                     <Grid lg={3}>
                       <Card variant="flat"
                         isHoverable
                         isPressable
                         borderWeight="extrabold"
                         key={i}
-                        className=" rounded-lg ml-auto mr-auto mt-11 pr-2 border-slate-50 border-spacing-4 flex justify-between flex-grow flex-shrink-0 Pastel bg-gradient-to-bl from-indigo-200 via-indigo-400 to-indigo-900 ">
+                        className=" rounded-lg ml-auto mr-auto mt-11 pr-2  border-slate-50 border-spacing-4 flex justify-between flex-grow flex-shrink-0 Pastel bg-gradient-to-bl from-indigo-200 via-indigo-400 to-indigo-900 ">
                         <Card.Header className="p-2 flex justify-center mt">
                           <Row>
                             <Text className=" font-cormorant  text-white font-thin">
@@ -248,6 +249,7 @@ export default function Home() {
                         <Card.Divider />
                         <Card.Body>
                           <Card.Image
+                          className=' max-w-xs'
 
                             src={nft.image}
 
