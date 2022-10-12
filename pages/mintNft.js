@@ -28,6 +28,7 @@ export default function createNft() {
     useEffect(() => {
         setContractAddres();
 
+
     }, [setmarketContract, setmintNftContract]);
 
     async function setContractAddres() {
@@ -42,34 +43,41 @@ export default function createNft() {
         const metamask = await detectEthereumProvider();
         let marketAddr;
         let mintNftAddr;
+        let network;
         try {
             if (metamask.chainId == HARDHAT) {
                 marketAddr = hhImagicaMarketContract
                 mintNftAddr = hhMintNftContract;
+                network = HARDHAT;
                 console.log("Addresses of HH ===>", marketAddr, " ", mintNftAddr);
             }
 
             else if (metamask.chainId == POLYGON) {
                 marketAddr = polImagicaMarketContract
                 mintNftAddr = polMintNftContract;
+                network = POLYGON;
                 console.log("Addresses of Polygon ===>", marketAddr, " ", mintNftAddr);
             }
 
             else if (metamask.chainId == GOERLI) {
                 marketAddr = goerImagicaMarketContract
                 mintNftAddr = goerMintNftContract;
+                network = GOERLI;
                 console.log("Addresses of Goerli ===>", marketAddr, " ", mintNftAddr);
+
             }
 
             else if (metamask.chainId == BSC) {
                 marketAddr = bscImagicaMarketContract
                 mintNftAddr = bscMintNftContract;
+                network = BSC;
                 console.log("Addresses of BSC ===>", marketAddr, " ", mintNftAddr);
             }
 
             setmarketContract(marketAddr);
             setmintNftContract(mintNftAddr);
-            console.log(`Address of the contracts ${dynamicmarketContract} and ${mintNftContract}`);
+            await new Promise((r) => setTimeout(r, 2000));
+            console.log(`Address of the contracts ${dynamicmarketContract} and ${mintNftContract} are on ${network}`);
 
 
         }
@@ -175,9 +183,9 @@ export default function createNft() {
         const connection = await web3modal.connect();
         const provider = new ethers.providers.Web3Provider(connection);
         const signer = provider.getSigner();
-        const mintContract = new ethers.Contract(hhMintNftContract, MintNFTABI, signer);
+        const mintContract = new ethers.Contract(mintNftContract, MintNFTABI, signer);
         let mintingFees = await mintContract.mintingFees();
-        
+
         console.log(`minting fees ${mintingFees}`);
         let transaction = await mintContract.mintNftToKeep(url, { value: mintingFees })
         await transaction.wait();
@@ -271,6 +279,17 @@ export default function createNft() {
 
                         </Button>
                     </Row>
+                    <Button
+                        shadow
+                        color="success"
+                        bordered
+                        size={"md"}
+                        onPress={setContractAddres}
+                        className="p-2"
+                    >
+                        Refresh Network
+
+                    </Button>
                 </Card>
             </Container>
         </Container>

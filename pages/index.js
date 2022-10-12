@@ -35,216 +35,235 @@ export default function Home() {
 
   // Sets NFTs listed on Hardhat Network 
   async function loadHardhatResell() {
-    let hhPriKey = simpleCrypto.decrypt(encryptedHardHat);
-    const provider = new ethers.providers.JsonRpcProvider(hhRpc);
-    const wallet = new ethers.Wallet(hhPriKey, provider);
-    const ImagicaMarketContract = new ethers.Contract(hhImagicaMarketContract, ImagicaMarketABI, wallet);
-    const mintNFTContract = new ethers.Contract(hhMintNftContract, MintNFTABI, wallet);
-    const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
-    console.log("listed NFT on Hardhat Network====> ", listedNFTData);
-    const itemArray = [];
+    try {
+      let hhPriKey = simpleCrypto.decrypt(encryptedHardHat);
+      const provider = new ethers.providers.JsonRpcProvider(hhRpc);
+      const wallet = new ethers.Wallet(hhPriKey, provider);
+      const ImagicaMarketContract = new ethers.Contract(hhImagicaMarketContract, ImagicaMarketABI, wallet);
+      const mintNFTContract = new ethers.Contract(hhMintNftContract, MintNFTABI, wallet);
+      const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
+      console.log("listed NFT on Hardhat Network====> ", listedNFTData);
+      const itemArray = [];
 
-    await Promise.all(
-      listedNFTData.map(async (i) => {
-        const rawTokenId = i.tokenId;
-        const rawItemId = i.itemId;
-        const market = i.owner;
-        let tokenId = parseInt(rawTokenId, 16);
-        let itemId = parseInt(rawItemId, 16);
-        let cost = i.price;
-        const tokenUri = await mintNFTContract.tokenURI(tokenId);
-        let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
-        const metadata = axios.get(cleanUri);
+      await Promise.all(
+        listedNFTData.map(async (i) => {
+          const rawTokenId = i.tokenId;
+          const rawItemId = i.itemId;
+          const market = i.owner;
+          let tokenId = parseInt(rawTokenId, 16);
+          let itemId = parseInt(rawItemId, 16);
+          let cost = i.price;
+          const tokenUri = await mintNFTContract.tokenURI(tokenId);
+          let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
+          const metadata = axios.get(cleanUri);
 
-        console.log("Market Owner is", market);
-        console.log("cost is ", cost)
-        console.log("Token Id is ", tokenId)
-        console.log("Item Id is ", i.itemId)
-        console.log("cost is ", cost)
+          console.log("Market Owner is", market);
+          console.log("cost is ", cost)
+          console.log("Token Id is ", tokenId)
+          console.log("Item Id is ", i.itemId)
+          console.log("cost is ", cost)
 
 
-        let price = ethers.utils.formatUnits(cost.toString(), 'ether');
-        metadata.then((value) => {
-          let rawImg = value.data.image;
-          let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let item = {
-            price,
-            itemId: itemId,
-            tokenId: tokenId,
-            image: image,
-            name: value.data.name,
-            description: value.data.description,
-            seller: i.seller,
-          };
-          itemArray.push(item);
-          console.log("Image URL", item.image)
+          let price = ethers.utils.formatUnits(cost.toString(), 'ether');
+          metadata.then((value) => {
+            let rawImg = value.data.image;
+            let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
+            let item = {
+              price,
+              itemId: itemId,
+              tokenId: tokenId,
+              image: image,
+              name: value.data.name,
+              description: value.data.description,
+              seller: i.seller,
+            };
+            itemArray.push(item);
+            console.log("Image URL", item.image)
 
-        });
+          });
 
-      }))
-    await new Promise((r) => setTimeout(r, 3300));
-    sethhNFTList(itemArray);
-
+        }))
+      await new Promise((r) => setTimeout(r, 3300));
+      sethhNFTList(itemArray);
+    }
+    catch (error) {
+      console.log(error.message);
+    }
 
   }
 
 
   // Sets NFTs listed on Goerli Network 
   async function loadGoerliResell() {
-    let PriKey = simpleCrypto.decrypt(encryptedTestnet);
-    const provider = new ethers.providers.JsonRpcProvider(goerRpc);
-    const wallet = new ethers.Wallet(PriKey, provider);
-    const ImagicaMarketContract = new ethers.Contract(goerImagicaMarketContract, ImagicaMarketABI, wallet);
-    const mintNFTContract = new ethers.Contract(goerMintNftContract, MintNFTABI, wallet);
-    const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
-    console.log("listed NFT on Goerli Network :::::=>", listedNFTData);
-    const itemArray = [];
+    try {
+      let PriKey = simpleCrypto.decrypt(encryptedTestnet);
+      const provider = new ethers.providers.JsonRpcProvider(goerRpc);
+      const wallet = new ethers.Wallet(PriKey, provider);
+      const ImagicaMarketContract = new ethers.Contract(goerImagicaMarketContract, ImagicaMarketABI, wallet);
+      const mintNFTContract = new ethers.Contract(goerMintNftContract, MintNFTABI, wallet);
+      const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
+      console.log("listed NFT on Goerli Network :::::=>", listedNFTData);
+      const itemArray = [];
 
-    await Promise.all(
-      listedNFTData.map(async (i) => {
-        const rawTokenId = i.tokenId;
-        const rawItemId = i.itemId;
-        const market = i.owner;
-        let tokenId = parseInt(rawTokenId, 16);
-        let itemId = parseInt(rawItemId, 16);
-        let cost = i.price;
-        const tokenUri = await mintNFTContract.tokenURI(tokenId);
-        let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
-        const metadata = axios.get(cleanUri);
+      await Promise.all(
+        listedNFTData.map(async (i) => {
+          const rawTokenId = i.tokenId;
+          const rawItemId = i.itemId;
+          const market = i.owner;
+          let tokenId = parseInt(rawTokenId, 16);
+          let itemId = parseInt(rawItemId, 16);
+          let cost = i.price;
+          const tokenUri = await mintNFTContract.tokenURI(tokenId);
+          let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
+          const metadata = axios.get(cleanUri);
 
-        console.log("Market Owner is", market);
-        console.log("cost is ", cost);
-        console.log("Token Id is ", tokenId);
-        console.log("Item Id is ", i.itemId);
-        console.log("cost is ", cost);
+          console.log("Market Owner is", market);
+          console.log("cost is ", cost);
+          console.log("Token Id is ", tokenId);
+          console.log("Item Id is ", i.itemId);
+          console.log("cost is ", cost);
 
 
-        let price = ethers.utils.formatUnits(cost.toString(), 'ether');
-        metadata.then((value) => {
-          let rawImg = value.data.image;
-          let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let item = {
-            price,
-            itemId: itemId,
-            tokenId: tokenId,
-            image: image,
-            name: value.data.name,
-            description: value.data.description,
-            seller: i.seller,
-          };
-          itemArray.push(item);
-          console.log("Image URL", item.image)
+          let price = ethers.utils.formatUnits(cost.toString(), 'ether');
+          metadata.then((value) => {
+            let rawImg = value.data.image;
+            let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
+            let item = {
+              price,
+              itemId: itemId,
+              tokenId: tokenId,
+              image: image,
+              name: value.data.name,
+              description: value.data.description,
+              seller: i.seller,
+            };
+            itemArray.push(item);
+            console.log("Image URL", item.image)
 
-        });
-      }))
-    await new Promise((r) => setTimeout(r, 3300));
-    setgoerNFTList(itemArray);
+          });
+        }))
+      await new Promise((r) => setTimeout(r, 3300));
+      setgoerNFTList(itemArray);
+    }
+    catch (error) {
+      console.log(error.message);
+    }
 
   }
 
   // Sets NFTs listed on BSC Testnet Network 
   async function loadBscResell() {
-    let PriKey = simpleCrypto.decrypt(encryptedTestnet);
-    const provider = new ethers.providers.JsonRpcProvider(bscRpc);
-    const wallet = new ethers.Wallet(PriKey, provider);
-    const ImagicaMarketContract = new ethers.Contract(bscImagicaMarketContract, ImagicaMarketABI, wallet);
-    const mintNFTContract = new ethers.Contract(bscMintNftContract, MintNFTABI, wallet);
-    const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
-    console.log("listed NFT on Bsc Network :::::=>", listedNFTData);
-    const itemArray = [];
+    try {
+      let PriKey = simpleCrypto.decrypt(encryptedTestnet);
+      const provider = new ethers.providers.JsonRpcProvider(bscRpc);
+      const wallet = new ethers.Wallet(PriKey, provider);
+      const ImagicaMarketContract = new ethers.Contract(bscImagicaMarketContract, ImagicaMarketABI, wallet);
+      const mintNFTContract = new ethers.Contract(bscMintNftContract, MintNFTABI, wallet);
+      const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
+      console.log("listed NFT on Bsc Network :::::=>", listedNFTData);
+      const itemArray = [];
 
-    await Promise.all(
-      listedNFTData.map(async (i) => {
-        const rawTokenId = i.tokenId;
-        const rawItemId = i.itemId;
-        const market = i.owner;
-        let tokenId = parseInt(rawTokenId, 16);
-        let itemId = parseInt(rawItemId, 16);
-        let cost = i.price;
-        const tokenUri = await mintNFTContract.tokenURI(tokenId);
-        let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
-        const metadata = axios.get(cleanUri);
+      await Promise.all(
+        listedNFTData.map(async (i) => {
+          const rawTokenId = i.tokenId;
+          const rawItemId = i.itemId;
+          const market = i.owner;
+          let tokenId = parseInt(rawTokenId, 16);
+          let itemId = parseInt(rawItemId, 16);
+          let cost = i.price;
+          const tokenUri = await mintNFTContract.tokenURI(tokenId);
+          let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
+          const metadata = axios.get(cleanUri);
 
-        console.log("Market Owner is", market);
-        console.log("cost is ", cost);
-        console.log("Token Id is ", tokenId);
-        console.log("Item Id is ", i.itemId);
-        console.log("cost is ", cost);
+          console.log("Market Owner is", market);
+          console.log("cost is ", cost);
+          console.log("Token Id is ", tokenId);
+          console.log("Item Id is ", i.itemId);
+          console.log("cost is ", cost);
 
 
-        let price = ethers.utils.formatUnits(cost.toString(), 'ether');
-        metadata.then((value) => {
-          let rawImg = value.data.image;
-          let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let item = {
-            price,
-            itemId: itemId,
-            tokenId: tokenId,
-            image: image,
-            name: value.data.name,
-            description: value.data.description,
-            seller: i.seller,
-          };
-          itemArray.push(item);
-          console.log("Image URL", item.image)
+          let price = ethers.utils.formatUnits(cost.toString(), 'ether');
+          metadata.then((value) => {
+            let rawImg = value.data.image;
+            let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
+            let item = {
+              price,
+              itemId: itemId,
+              tokenId: tokenId,
+              image: image,
+              name: value.data.name,
+              description: value.data.description,
+              seller: i.seller,
+            };
+            itemArray.push(item);
+            console.log("Image URL", item.image)
 
-        });
-      }))
-    await new Promise((r) => setTimeout(r, 3300));
-    setbscNFTList(itemArray);
+          });
+        }))
+      await new Promise((r) => setTimeout(r, 3300));
+      setbscNFTList(itemArray);
+    }
+    catch (error) {
+      console.log(error.message);
+    }
 
   }
 
   // Sets NFTs listed on BSC Testnet Network 
   async function loadPolygonResell() {
-    let PriKey = simpleCrypto.decrypt(encryptedTestnet);
-    const provider = new ethers.providers.JsonRpcProvider(polRpc);
-    const wallet = new ethers.Wallet(PriKey, provider);
-    const ImagicaMarketContract = new ethers.Contract(polImagicaMarketContract, ImagicaMarketABI, wallet);
-    const mintNFTContract = new ethers.Contract(polMintNftContract, MintNFTABI, wallet);
-    const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
-    console.log("listed NFT on Polygon Network :::::=>", listedNFTData);
-    const itemArray = [];
+    try {
+      let PriKey = simpleCrypto.decrypt(encryptedTestnet);
+      const provider = new ethers.providers.JsonRpcProvider(polRpc);
+      const wallet = new ethers.Wallet(PriKey, provider);
+      const ImagicaMarketContract = new ethers.Contract(polImagicaMarketContract, ImagicaMarketABI, wallet);
+      const mintNFTContract = new ethers.Contract(polMintNftContract, MintNFTABI, wallet);
+      const listedNFTData = await ImagicaMarketContract.getAvailableNFT();
+      console.log("listed NFT on Polygon Network :::::=>", listedNFTData);
+      const itemArray = [];
 
-    await Promise.all(
-      listedNFTData.map(async (i) => {
-        const rawTokenId = i.tokenId;
-        const rawItemId = i.itemId;
-        const market = i.owner;
-        let tokenId = parseInt(rawTokenId, 16);
-        let itemId = parseInt(rawItemId, 16);
-        let cost = i.price;
-        const tokenUri = await mintNFTContract.tokenURI(tokenId);
-        let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
-        const metadata = axios.get(cleanUri);
+      await Promise.all(
+        listedNFTData.map(async (i) => {
+          const rawTokenId = i.tokenId;
+          const rawItemId = i.itemId;
+          const market = i.owner;
+          let tokenId = parseInt(rawTokenId, 16);
+          let itemId = parseInt(rawItemId, 16);
+          let cost = i.price;
+          const tokenUri = await mintNFTContract.tokenURI(tokenId);
+          let cleanUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
+          const metadata = axios.get(cleanUri);
 
-        console.log("Market Owner is", market);
-        console.log("cost is ", cost);
-        console.log("Token Id is ", tokenId);
-        console.log("Item Id is ", i.itemId);
-        console.log("cost is ", cost);
+          console.log("Market Owner is", market);
+          console.log("cost is ", cost);
+          console.log("Token Id is ", tokenId);
+          console.log("Item Id is ", i.itemId);
+          console.log("cost is ", cost);
 
 
-        let price = ethers.utils.formatUnits(cost.toString(), 'ether');
-        metadata.then((value) => {
-          let rawImg = value.data.image;
-          let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
-          let item = {
-            price,
-            itemId: itemId,
-            tokenId: tokenId,
-            image: image,
-            name: value.data.name,
-            description: value.data.description,
-            seller: i.seller,
-          };
-          itemArray.push(item);
-          console.log("Image URL", item.image)
+          let price = ethers.utils.formatUnits(cost.toString(), 'ether');
+          metadata.then((value) => {
+            let rawImg = value.data.image;
+            let image = rawImg.replace("ipfs://", "https://ipfs.io/ipfs/");
+            let item = {
+              price,
+              itemId: itemId,
+              tokenId: tokenId,
+              image: image,
+              name: value.data.name,
+              description: value.data.description,
+              seller: i.seller,
+            };
+            itemArray.push(item);
+            console.log("Image URL", item.image)
 
-        });
-      }))
-    await new Promise((r) => setTimeout(r, 3300));
-    setpolNFTList(itemArray);
+          });
+        }))
+      await new Promise((r) => setTimeout(r, 3300));
+      setpolNFTList(itemArray);
+    }
+    catch (error) {
+      console.log(error.errorArgs);
+    }
 
   }
 
