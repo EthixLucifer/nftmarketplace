@@ -1,6 +1,12 @@
 require("@nomicfoundation/hardhat-toolbox");
-
 /** @type import('hardhat/config').HardhatUserConfig */
+// const simpleCrypto = require("./components/configuration");
+
+
+const walletPrivateKey = "";
+
+
+
 module.exports = {
   solidity: "0.8.9",
 
@@ -15,7 +21,28 @@ module.exports = {
 
     polygon: {
       url: "https://rpc-mumbai.maticvigil.com",
-      chainId: 0x13881,
+      accounts: [`${walletPrivateKey}`],
+      chainId: 80001,
+      blockGasLimit: 100000000429720,
+      gas: "auto",
+      gasPrice: "auto"
+    }
+    ,
+
+    goerli: {
+      url: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+      accounts: [`${walletPrivateKey}`],
+      chainId: 5,
+      blockGasLimit: 100000000429720,
+      gas: "auto",
+      gasPrice: "auto"
+    }
+    ,
+
+    bsc: {
+      url: "https://bsctestapi.terminet.io/rpc",
+      accounts: [`${walletPrivateKey}`],
+      chainId: 97,
       blockGasLimit: 100000000429720,
       gas: "auto",
       gasPrice: "auto"

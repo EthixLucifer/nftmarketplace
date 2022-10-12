@@ -5,18 +5,25 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 
-import { ethers } from "hardhat";
+const hre = require("hardhat");
 
 async function main() {
 
 
-  const imagicaMarket = await ethers.getContractFactory("imagicaMarket");
+  const imagicaMarket = await hre.ethers.getContractFactory("imagicaMarket");
   const imagica = await imagicaMarket.deploy();
-
   await imagica.deployed();
+
+
+  const mintNFT = await hre.ethers.getContractFactory("mintNft");
+  const mintNft = await mintNFT.deploy(imagica.address);
+  await mintNft.deployed();
 
   console.log(
     `Imagica Market Contract Deployed To Address :::=> ${imagica.address} <========`
+  );
+  console.log(
+    `NFT mint Contract Deployed To Address :::=> ${mintNft.address} <========`
   );
 }
 

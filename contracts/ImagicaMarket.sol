@@ -12,8 +12,8 @@ contract imagicaMarket is IERC721Receiver, ReentrancyGuard {
     Counters.Counter private _itemsSold;
 
     address payable owner;
-    uint public listingFees = 0.05 ether;
-    uint public mintingFees = 0.1 ether;
+    uint public listingFees = 0.005 ether;
+    uint public mintingFees = 0.001 ether;
 
     constructor() {
         owner = payable(msg.sender);

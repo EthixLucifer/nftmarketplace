@@ -10,7 +10,7 @@ contract mintNft is ERC721URIStorage, ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter public _tokenId;
     address marketContractAddress;
-    uint public mintingFees = 0.1 ether;
+    uint public mintingFees = 0.001 ether;
 
     constructor(address aMarketContractAddress) ERC721("Imagica", "IMGCA") {
         marketContractAddress = aMarketContractAddress;
