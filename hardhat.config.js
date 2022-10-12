@@ -11,6 +11,14 @@ module.exports = {
       blockGasLimit: 100000000429720,
       gas: 2100000,
       gasPrice: 8000000000
+    },
+
+    polygon: {
+      url: "https://rpc-mumbai.maticvigil.com",
+      chainId: 0x13881,
+      blockGasLimit: 100000000429720,
+      gas: "auto",
+      gasPrice: "auto"
     }
   }
 };

@@ -2,38 +2,19 @@ import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Web3Modal from "web3modal";
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { Grid, Card, Text, Button, Row, Spacer, Container, Input, Col } from '@nextui-org/react';
 import { simpleCrypto, encryptedHardHat } from '../components/configuration';
-import NFTCollectionABI from "../components/ABI/NFTCollection.json"
-import NFTresellABI from "../components/ABI/NFTReselll.json"
 import MintNFTABI from "../components/ABI/MintNft.json"
 import ImagicaMarketABI from "../components/ABI/ImagicaMarket.json"
-import { hhRpc } from '../components/configuration';
-import { hhNFTCollectionContract, hhNFTResell, hhMintNftContract, hhImagicaMarketContract } from '../components/configuration';
+import { hhRpc, polRpc, bscRpc, goerRpc } from '../components/configuration';
+import { hhMintNftContract, hhImagicaMarketContract } from '../components/configuration';
+import { goerMintNftContract, goerImagicaMarketContract } from '../components/configuration';
+import { bscMintNftContract, bscImagicaMarketContract } from '../components/configuration';
+import { polMintNftContract, polImagicaMarketContract } from '../components/configuration';
 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
-
-
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3 // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    slidesToSlide: 2 // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    slidesToSlide: 1 // optional, default to 1.
-  }
-};
 
 
 export default function Home() {
@@ -86,7 +67,7 @@ export default function Home() {
             image: image,
             name: value.data.name,
             description: value.data.description,
-            seller:i.seller,
+            seller: i.seller,
           };
           itemArray.push(item);
           console.log("Image URL", item.image)
@@ -228,7 +209,7 @@ export default function Home() {
                 return (
 
 
-                  <Container  className='flex justify-center  pb-1 ' >
+                  <Container className='flex justify-center  pb-1 ' >
                     <Grid lg={3}>
                       <Card variant="flat"
                         isHoverable
@@ -249,7 +230,7 @@ export default function Home() {
                         <Card.Divider />
                         <Card.Body>
                           <Card.Image
-                          className=' max-w-xs'
+                            className=' max-w-xs'
 
                             src={nft.image}
 

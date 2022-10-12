@@ -5,32 +5,47 @@ import { useRouter } from "next/router";
 import { Text, Card, Container, Grid, Button, Row, Image, Col, Modal, Input, Popover } from "@nextui-org/react";
 import axios from "axios";
 import Web3 from "web3"
-import { hhNFTResell, hhMintNftContract, hhNFTCollectionContract, hhRpc, simpleCrypto, encryptedHardHat, hhImagicaMarketContract } from "../components/configuration";
-import NFTCollectionABI from "../components/ABI/NFTCollection.json"
+
+//used to detect which blockchain is currently used by metamask
+import detectEthereumProvider from "@metamask/detect-provider";
+import { hhMintNftContract, hhRpc, simpleCrypto, encryptedHardHat, hhImagicaMarketContract } from "../components/configuration";
+import { polMintNftContract, polRpc, encryptedTestnet, polImagicaMarketContract } from "../components/configuration";
+import { bscMintNftContract, bscRpc, bscImagicaMarketContract } from "../components/configuration";
+import { goerMintNftContract, goerRpc, goerImagicaMarketContract } from "../components/configuration";
 import ImagicaMarketABI from "../components/ABI/ImagicaMarket.json"
-import resellNFTABI from "../components/ABI/NFTReselll.json"
 import MintNFTABI from "../components/ABI/MintNft.json"
-import NavbarCustom from "../components/Navbar"
+
 
 
 
 
 
 export default function Sell() {
-    const [user, setuser] = useState([])
-    const [resalePrice, setresalePrice] = useState({ price: '' })
+    const [user, setuser] = useState([]);
+    const [resalePrice, setresalePrice] = useState({ price: '' });
     const [createdNft, setcreatedNft] = useState([]);
-    const [nft, setnft] = useState([]);
+    const [ChainName, setChainName] = useState([]);
+    const [rpcUrl, setrpcUrl] = useState([]);
+    const [walletPrivateKey, setwalletPrivateKey] = useState([]);
+    const [mintNftContractAddress, setmintNftContractAddress] = useState([]);
     const [loadingState, setloadingState] = useState("true");
     const [uiModal, setuiModal] = useState(false);
     const router = useRouter();
     useEffect(() => {
 
         connectUser();
-        getCreatedNft();
-    }, [setnft, user, setcreatedNft])
+        setRpcUrl();
+        setChain();
+        // getCreatedNft();
+    }, [user, setcreatedNft])
 
     async function connectUser() {
+
+        const web3modal = new Web3Modal();
+        const connection = await web3modal.connect();
+        const provider = new ethers.providers.Web3Provider(connection);
+        const signer = provider.getSigner();
+
         if (window.ethereum) {
             const web3 = new Web3(window.ethereum);
             await window.ethereum.send('eth_requestAccounts');
@@ -48,79 +63,242 @@ export default function Sell() {
 
     }
 
+    async function setRpcUrl() {
+
+        const HARDHAT = "0x539";
+        const POLYGON = "0x13881";
+        const GOERLI = "0x5";
+        const BSC = "0x61";
+
+        const metamask = await detectEthereumProvider();
+        console.log("metamask ::::::", metamask)
+        try {
+            let RPC;
+
+            if (metamask.chainId == HARDHAT) {
+                RPC = hhRpc;
+            }
+
+            else if (metamask.chainId == BSC) {
+                RPC = bscRpc;
+            }
+
+            else if (metamask.chainId == POLYGON) {
+                RPC = polRpc;
+            }
+
+            else if (metamask.chainId == GOERLI) {
+                RPC = goerRpc;
+            }
+
+            else {
+                console.log("User is using a Different Chain that is not Added Yet");
+            }
+            setrpcUrl(RPC);
+            console.log("Initialized the RPC URL to ===>", rpcUrl, "<<<=====");
+            setPrivateKey();
+        }
+        catch (error) {
+            console.log("Encountered Error while setting the RPC url for the marketplace::::=> ", error, "<<<=====");
+        }
+
+    }
 
 
+    async function setPrivateKey() {
+
+        const HARDHAT = "0x539";
+        const POLYGON = "0x13881";
+        const GOERLI = "0x5";
+        const BSC = "0x61";
+
+        const metamask = await detectEthereumProvider();
+        let PRIVATEKEY;
+
+        try {
+            if (metamask.chainId == HARDHAT) {
+                PRIVATEKEY = encryptedHardHat;
+            }
+
+            else if (metamask.chainId == BSC || metamask.chainId == GOERLI || metamask.chainId == POLYGON) {
+                PRIVATEKEY = encryptedTestnet;
+            }
+
+            else {
+                console.log("Both conditions failed while setting the private key");
+            }
+
+            setwalletPrivateKey(PRIVATEKEY);
+            console.log("Initialized the Wallet key to ==========>>>>>", PRIVATEKEY);
+            setContractAddress();
+
+        }
+        catch (error) {
+            console.log("Encountered Error while setting the wallet key for the marketplace::::=> ", error, "<<<=====");
+        }
+
+    }
+
+
+    async function setContractAddress() {
+
+        try {
+            const HARDHAT = "0x539";
+            const POLYGON = "0x13881";
+            const GOERLI = "0x5";
+            const BSC = "0x61";
+
+            const metamask = await detectEthereumProvider();
+            let addr;
+            if (metamask.chainId == HARDHAT) {
+                addr = hhMintNftContract;
+            }
+
+            else if (metamask.chainId == BSC) {
+                addr = bscMintNftContract;
+            }
+
+            else if (metamask.chainId == POLYGON) {
+                addr = polMintNftContract;
+            }
+
+            else if (metamask.chainId == GOERLI) {
+                addr = goerMintNftContract;
+            }
+
+            else {
+                console.log("none of the above addresses are set as contract addresses");
+            }
+            console.log("none of the above addresses are set as contract addresses=========>", mintNftContractAddress);
+            setmintNftContractAddress(addr);
+            getCreatedNft();
+
+        }
+        catch (error) { console.log("Error faced while setting the contract Address, ", error) }
+    }
+
+    async function setChain() {
+        try {
+            const HARDHAT = "0x539";
+            const POLYGON = "0x13881";
+            const GOERLI = "0x5";
+            const BSC = "0x61";
+
+            const metamask = await detectEthereumProvider();
+            let name;
+            if (metamask.chainId == HARDHAT) {
+                name = "HARDHAT"
+            }
+
+            else if (metamask.chainId == BSC) {
+                name = "Binance Smart Chain Testnet";
+            }
+
+            else if (metamask.chainId == POLYGON) {
+                name = "Polygon Mumbai Testnet"
+            }
+
+            else if (metamask.chainId == GOERLI) {
+                name = "Goerli Testnet";
+            }
+
+            else {
+                console.log("none of the above addresses are set as contract addresses");
+            }
+            setChainName(name);
+
+        }
+        catch (error) { console.log("Error faced while setting the contract Address, ", error) }
+
+    }
 
 
     async function getCreatedNft() {
-        const provider = new ethers.providers.JsonRpcProvider(hhRpc);
-        const key = simpleCrypto.decrypt(encryptedHardHat);
-        const wallet = new ethers.Wallet(key, provider);
-        const NFTMintedContract = new ethers.Contract(hhMintNftContract, MintNFTABI, wallet);
-        const itemArray = [];
-        console.log("INside getcreatednft::::::::::::")
-        NFTMintedContract._tokenId().then(result => {
-            console.log("result getcreated ======", result);
-            let totalSupply = parseInt(result, 16);
-            for (let i = 0; i < totalSupply; i++) {
-                console.log("Inside loop ", i);
-                let tokenId = i + 1;
-                console.log("TokenId getcreated ======", tokenId);
-                const owner = NFTMintedContract.ownerOf(tokenId).catch(function (error) {
-                    console.log("FAced error while getting the owner of tokenId ", error);
+        try {
+            const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+            const key = simpleCrypto.decrypt(walletPrivateKey);
+            const wallet = new ethers.Wallet(key, provider);
+            const NFTMintedContract = new ethers.Contract(mintNftContractAddress, MintNFTABI, wallet);
+            const itemArray = [];
+            console.log("INside getcreatednft::::::::::::")
+            NFTMintedContract._tokenId().then(result => {
+                console.log("result getcreated ======", result);
+                let totalSupply = parseInt(result, 16);
+                for (let i = 0; i < totalSupply; i++) {
+                    console.log("Inside loop ", i);
+                    let tokenId = i + 1;
+                    console.log("TokenId getcreated ======", tokenId);
+                    const owner = NFTMintedContract.ownerOf(tokenId).catch(function (error) {
+                        console.log("FAced error while getting the owner of tokenId ", error);
 
-                });
+                    });
 
-                const rawUri = NFTMintedContract.tokenURI(tokenId).catch(function (error) {
-                    console.log("Faced error while fetching the raw URI ", error);
-                });
-                const URI = Promise.resolve(rawUri);
-                const getUri = URI.then(value => {
-                    let ipfsURI = value;
-                    console.log("Unclean ipfs uri :::::", ipfsURI)
-                    let cleanURI = ipfsURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-                    console.log("Clean URI  ", cleanURI)
-                    let metadata = axios.get(cleanURI).catch(function (error) {
-                        console.log(error.toJSON());
-                    })
-                    console.log("First Metadata ::::>", metadata);
-                    return metadata;
-                })
-                console.log("GETURI ", getUri)
-                getUri.then(value => {
-                    try {
-                        let rawImage = value.data.image;
-                        let name = value.data.name;
-                        let description = value.data.description;
-                        let price = value.data.price;
-                        let image = rawImage.replace("ipfs://", "https://ipfs.io/ipfs/");
-                        Promise.resolve(owner).then(value => {
-                            let owner = value;
-                            let meta = {
-                                name: name,
-                                tokenId: tokenId,
-                                image: image,
-                                price: price,
-                                description: description,
-                                owner: owner
-
-                            }
-                            console.log("Logging Meta Variable of the CreatNFT function for token Id", tokenId, "=====>", meta, "<========");
-                            itemArray.push(meta);
+                    const rawUri = NFTMintedContract.tokenURI(tokenId).catch(function (error) {
+                        console.log("Faced error while fetching the raw URI ", error);
+                    });
+                    const URI = Promise.resolve(rawUri);
+                    const getUri = URI.then(value => {
+                        let ipfsURI = value;
+                        console.log("Unclean ipfs uri :::::", ipfsURI)
+                        let cleanURI = ipfsURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+                        console.log("Clean URI  ", cleanURI)
+                        let metadata = axios.get(cleanURI).catch(function (error) {
+                            console.log(error.toJSON());
                         })
-                    }
+                        console.log("First Metadata ::::>", metadata);
+                        return metadata;
+                    })
+                    console.log("GETURI ", getUri)
+                    getUri.then(value => {
+                        try {
+                            let rawImage = value.data.image;
+                            let name = value.data.name;
+                            let description = value.data.description;
+                            let price = value.data.price;
+                            let image = rawImage.replace("ipfs://", "https://ipfs.io/ipfs/");
+                            Promise.resolve(owner).then(value => {
+                                let owner = value;
+                                let meta = {
+                                    name: name,
+                                    tokenId: tokenId,
+                                    image: image,
+                                    price: price,
+                                    description: description,
+                                    owner: owner
 
-                    catch(error){
-                        console.log("Error is the Following ", error);
-                    }
-        
-        })
-            }
-        })
+                                }
+                                console.log("Logging Meta Variable of the CreatNFT function for token Id", tokenId, "=====>", meta, "<========");
+                                itemArray.push(meta);
+                            })
+                        }
 
-        await new Promise(r => setTimeout(r, 3000));
-        setcreatedNft(itemArray);
-        setloadingState("false");
+                        catch (error) {
+                            console.log("Error is the Following ", error);
+                        }
+
+                    })
+                }
+            })
+
+            await new Promise(r => setTimeout(r, 3000));
+            setcreatedNft(itemArray);
+            setloadingState("false");
+        }
+        catch (error) {
+            console.log("Error while fetching nfts ===>", error, "<<======");
+        }
+    }
+
+    async function refreshNFT() {
+        setrpcUrl();
+        setChain();
+    }
+
+    async function connectWallet() {
+        connectUser();
+        setrpcUrl();
+        setChain();
+
     }
 
     //Executes when there are no Nfts in the wallet
@@ -161,6 +339,7 @@ export default function Sell() {
             </Container>
 
         );
+
     //executes when there are nfts in the wallet
     return (
         <div className=" ">
@@ -179,10 +358,10 @@ export default function Sell() {
 
                             <Row className=" justify-between pl-4 pr-4  ">
 
-                                <Button bordered color={"error"} size={"sm"} onPress={connectUser} className="font-bold justify-center rounded-sm">Refresh Wallet</Button>
+                                <Button bordered color={"error"} size={"sm"} onPress={connectWallet} className="font-bold justify-center rounded-sm">Refresh Wallet</Button>
 
                                 {/* <Button bordered color={"secondary"} size={"sm"} onPress={getWalletNFT} */}
-                                <Button bordered color={"secondary"} size={"sm"} onPress={getCreatedNft}
+                                <Button bordered color={"secondary"} size={"sm"} onPress={refreshNFT}
                                     className="font-bold justify-center rounded-sm"
                                 >Refresh NFT's</Button>
                             </Row>

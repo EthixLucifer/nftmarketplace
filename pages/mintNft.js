@@ -6,18 +6,83 @@ import { Text, Card, Container, Grid, Button, Row, Image, Col, Textarea, Input, 
 import axios from "axios";
 import Web3 from "web3"
 import { hhImagicaMarketContract, hhMintNftContract, hhRpc, simpleCrypto, encryptedHardHat, ipfsClient } from "../components/configuration";
+import { polImagicaMarketContract, polMintNftContract, polRpc, encryptedTestnet } from "../components/configuration";
+import { goerImagicaMarketContract, goerMintNftContract, goerRpc } from "../components/configuration";
+import { bscImagicaMarketContract, bscMintNftContract, bscRpc } from "../components/configuration";
 import ImagicaMarketABI from "../components/ABI/ImagicaMarket.json"
 import MintNFTABI from "../components/ABI/MintNft.json"
 
 import { TransactionDescription } from "@ethersproject/abi";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 
 export default function createNft() {
 
     const [nftUrl, setnftUrl] = useState(null);
     const [formInput, setformInput] = useState({ price: '', name: '', description: '' });
+    const [dynamicmarketContract, setmarketContract] = useState([]);
+    const [mintNftContract, setmintNftContract] = useState([]);
+
     const router = useRouter();
 
+    useEffect(() => {
+        setContractAddres();
+
+    }, [setmarketContract, setmintNftContract]);
+
+    async function setContractAddres() {
+
+        //multichain started 
+
+        const HARDHAT = "0x539";
+        const POLYGON = "0x13881";
+        const GOERLI = "0x5";
+        const BSC = "0x61";
+
+        const metamask = await detectEthereumProvider();
+        let marketAddr;
+        let mintNftAddr;
+        try {
+            if (metamask.chainId == HARDHAT) {
+                marketAddr = hhImagicaMarketContract
+                mintNftAddr = hhMintNftContract;
+                console.log("Addresses of HH ===>", marketAddr, " ", mintNftAddr);
+            }
+
+            else if (metamask.chainId == POLYGON) {
+                marketAddr = polImagicaMarketContract
+                mintNftAddr = polMintNftContract;
+                console.log("Addresses of Polygon ===>", marketAddr, " ", mintNftAddr);
+            }
+
+            else if (metamask.chainId == GOERLI) {
+                marketAddr = goerImagicaMarketContract
+                mintNftAddr = goerMintNftContract;
+                console.log("Addresses of Goerli ===>", marketAddr, " ", mintNftAddr);
+            }
+
+            else if (metamask.chainId == BSC) {
+                marketAddr = bscImagicaMarketContract
+                mintNftAddr = bscMintNftContract;
+                console.log("Addresses of BSC ===>", marketAddr, " ", mintNftAddr);
+            }
+
+            setmarketContract(marketAddr);
+            setmintNftContract(mintNftAddr);
+            console.log(`Address of the contracts ${dynamicmarketContract} and ${mintNftContract}`);
+
+
+        }
+
+        catch (error) {
+            console.log(error);
+        }
+
+        //multichain ended 
+    }
+
+
+    //uploads image to IPFS
     async function onChange(e) {
         const file = e.target.files[0];
         try {
@@ -38,6 +103,7 @@ export default function createNft() {
             console.log("Error is ::>", error);
         }
     }
+
 
     async function mintNftToList() {
         const { name, price, description } = formInput;
@@ -61,12 +127,13 @@ export default function createNft() {
     }
 
     async function mintNFT(url) {
+
         const web3modal = new Web3Modal();
         const connection = await web3modal.connect();
         const provider = new ethers.providers.Web3Provider(connection);
         const signer = provider.getSigner();
-
-        const mintNftcontract = new ethers.Contract(hhMintNftContract, MintNFTABI, signer);
+        console.log(`mintnft Address ${mintNftContract}`);
+        const mintNftcontract = new ethers.Contract(mintNftContract, MintNFTABI, signer);
         let mintNfttransaction = await mintNftcontract.mintNftToSell(url);
         let tx = await mintNfttransaction.wait();
         let event = tx.events[0];
@@ -75,11 +142,11 @@ export default function createNft() {
         let tokenId = value.toNumber();
         console.log("token ID After Event  ", tokenId);
         const price = ethers.utils.parseUnits(formInput.price, "ether");
-        const marketContract = new ethers.Contract(hhImagicaMarketContract, ImagicaMarketABI, signer);
+        const marketContract = new ethers.Contract(dynamicmarketContract, ImagicaMarketABI, signer);
         let listingFees = await marketContract.mintingFees();
-       
+
         console.log(listingFees, " listing fees")
-        let marketTransaction = await marketContract.createVaultItem(hhMintNftContract, price, tokenId, { value: listingFees })
+        let marketTransaction = await marketContract.createVaultItem(mintNftContract, price, tokenId, { value: listingFees })
         await marketTransaction.wait();
         router.push("/");
 
@@ -109,7 +176,9 @@ export default function createNft() {
         const provider = new ethers.providers.Web3Provider(connection);
         const signer = provider.getSigner();
         const mintContract = new ethers.Contract(hhMintNftContract, MintNFTABI, signer);
-        const mintingFees = mintContract.mintingFees();
+        let mintingFees = await mintContract.mintingFees();
+        
+        console.log(`minting fees ${mintingFees}`);
         let transaction = await mintContract.mintNftToKeep(url, { value: mintingFees })
         await transaction.wait();
         router.push("/myNFT");
@@ -131,9 +200,9 @@ export default function createNft() {
                     {
                         nftUrl &&
                         //  (  ) &&
-                            console.log(nftUrl)
-                        }
-                        <Image className="rounded max-w-xs min-w-min" src={nftUrl} />
+                        console.log(nftUrl)
+                    }
+                    <Image className="rounded max-w-xs min-w-min" src={nftUrl} />
                 </Card>
 
                 <Card className="bg-transparent max-w-fit flex justify-items-center" >

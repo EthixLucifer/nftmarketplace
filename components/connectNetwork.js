@@ -20,7 +20,7 @@ export default function Changenetwork() {
 
         if (selectedValue ==="BSC Testnet" ) {
             bscChain();
-            console.log("Inside BSC testnwet")
+            // console.log("Inside BSC testnwet")
         }
 
         else if (polygon == selectedValue)
