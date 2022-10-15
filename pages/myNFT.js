@@ -28,6 +28,7 @@ export default function Sell() {
     const [rpcUrl, setrpcUrl] = useState([]);
     const [walletPrivateKey, setwalletPrivateKey] = useState([]);
     const [mintNftContractAddress, setmintNftContractAddress] = useState([]);
+    const [imagicaMarketContractAddress, setimagicaMarketContractAddress] = useState([]);
     const [loadingState, setloadingState] = useState("true");
     const [uiModal, setuiModal] = useState(false);
     const router = useRouter();
@@ -104,7 +105,6 @@ export default function Sell() {
 
     }
 
-
     async function setPrivateKey() {
 
         const HARDHAT = "0x539";
@@ -139,7 +139,6 @@ export default function Sell() {
 
     }
 
-
     async function setContractAddress() {
 
         try {
@@ -150,27 +149,34 @@ export default function Sell() {
 
             const metamask = await detectEthereumProvider();
             let addr;
+            let marketAddr;
             if (metamask.chainId == HARDHAT) {
                 addr = hhMintNftContract;
+                marketAddr = hhImagicaMarketContract;
             }
 
             else if (metamask.chainId == BSC) {
                 addr = bscMintNftContract;
+                marketAddr = bscImagicaMarketContract;
             }
 
             else if (metamask.chainId == POLYGON) {
                 addr = polMintNftContract;
+                marketAddr = polImagicaMarketContract;
             }
 
             else if (metamask.chainId == GOERLI) {
                 addr = goerMintNftContract;
+                marketAddr = goerImagicaMarketContract;
             }
 
             else {
                 console.log("none of the above addresses are set as contract addresses");
             }
-            console.log("none of the above addresses are set as contract addresses=========>", mintNftContractAddress);
+            console.log(" MintNft addresses are set as contract addresses=========>", mintNftContractAddress);
+            console.log(" MintNft addresses are set as contract addresses=========>", imagicaMarketContractAddress);
             setmintNftContractAddress(addr);
+            setimagicaMarketContractAddress(marketAddr);
             getCreatedNft();
 
         }
@@ -320,7 +326,7 @@ export default function Sell() {
 
                                 <Button bordered color={"secondary"} size={"sm"} onPress={getCreatedNft}
                                     className="font-bold justify-center rounded-sm"
-                                >Refresh NFT's</Button>
+                                >Refresh NFT&apos;s</Button>
                             </Row>
 
                         </Card>
@@ -363,7 +369,7 @@ export default function Sell() {
                                 {/* <Button bordered color={"secondary"} size={"sm"} onPress={getWalletNFT} */}
                                 <Button bordered color={"secondary"} size={"sm"} onPress={refreshNFT}
                                     className="font-bold justify-center rounded-sm"
-                                >Refresh NFT's</Button>
+                                >Refresh NFT&apos;s</Button>
                             </Row>
 
                         </Card>
@@ -403,14 +409,14 @@ export default function Sell() {
                                         const signer = provider.getSigner();
                                         const price = ethers.utils.parseUnits(resalePrice.price, 'ether');
 
-                                        const mintNFTContract = new ethers.Contract(hhMintNftContract, MintNFTABI, signer);
-                                        const ImagicaMarketContract = new ethers.Contract(hhImagicaMarketContract, ImagicaMarketABI, signer);
+                                        const mintNFTContract = new ethers.Contract(mintNftContractAddress, MintNFTABI, signer);
+                                        const ImagicaMarketContract = new ethers.Contract(imagicaMarketContractAddress, ImagicaMarketABI, signer);
                                         const nftOwner = await mintNFTContract.ownerOf(nfts.tokenId);
                                         console.log("Owner of the listing NFT ,, ", nftOwner);
                                         let nftMintingFees = await ImagicaMarketContract.mintingFees();
                                         nftMintingFees = nftMintingFees.toString();
 
-                                        let transaction = await ImagicaMarketContract.createVaultItem(hhMintNftContract, price, nfts.tokenId, { value: nftMintingFees });
+                                        let transaction = await ImagicaMarketContract.createVaultItem(mintNftContractAddress, price, nfts.tokenId, { value: nftMintingFees });
                                         await transaction.wait();
                                         router.push('/');
 
@@ -433,8 +439,8 @@ export default function Sell() {
                                         isHoverable
                                         // isPressable
                                         borderWeight="extrabold"
-                                        className="  w-1/5 h-1/5 rounded-lg ml-auto mr-auto mt-11 border-slate-100 border-spacing-4 bg-gradient-to-tl from-gray-400 via-gray-600 to-blue-800">
-                                        <Card.Header className="p-2 ">
+                                        className="  w-1/5 h-1/5 rounded-lg ml-auto mr-auto mt-11 border-slate-100 border-spacing-4 bg-gradient-to-tl from-gray-400 via-gray-600 to-blue-800" key={nfts.tokenId}>
+                                        <Card.Header className="p-2 " key={nfts.tokenId}>
                                             <Row>
                                                 <Text className=" font-cormorant  text-white font-thin">
                                                     {nfts.name}

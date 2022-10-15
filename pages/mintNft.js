@@ -16,7 +16,7 @@ import { TransactionDescription } from "@ethersproject/abi";
 import detectEthereumProvider from "@metamask/detect-provider";
 
 
-export default function createNft() {
+export default function CreateNft() {
 
     const [nftUrl, setnftUrl] = useState(null);
     const [formInput, setformInput] = useState({ price: '', name: '', description: '' });
@@ -135,28 +135,33 @@ export default function createNft() {
     }
 
     async function mintNFT(url) {
+        try {
 
-        const web3modal = new Web3Modal();
-        const connection = await web3modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer = provider.getSigner();
-        console.log(`mintnft Address ${mintNftContract}`);
-        const mintNftcontract = new ethers.Contract(mintNftContract, MintNFTABI, signer);
-        let mintNfttransaction = await mintNftcontract.mintNftToSell(url);
-        let tx = await mintNfttransaction.wait();
-        let event = tx.events[0];
-        console.log("Event occured  ", event);
-        let value = event.args[2];
-        let tokenId = value.toNumber();
-        console.log("token ID After Event  ", tokenId);
-        const price = ethers.utils.parseUnits(formInput.price, "ether");
-        const marketContract = new ethers.Contract(dynamicmarketContract, ImagicaMarketABI, signer);
-        let listingFees = await marketContract.mintingFees();
+            const web3modal = new Web3Modal();
+            const connection = await web3modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const signer = provider.getSigner();
+            console.log(`mintnft Address ${mintNftContract}`);
+            const mintNftcontract = new ethers.Contract(mintNftContract, MintNFTABI, signer);
+            let mintNfttransaction = await mintNftcontract.mintNftToSell(url);
+            let tx = await mintNfttransaction.wait();
+            let event = tx.events[0];
+            console.log("Event occured  ", event);
+            let value = event.args[2];
+            let tokenId = value.toNumber();
+            console.log("token ID After Event  ", tokenId);
+            const price = ethers.utils.parseUnits(formInput.price, "ether");
+            const marketContract = new ethers.Contract(dynamicmarketContract, ImagicaMarketABI, signer);
+            let listingFees = await marketContract.mintingFees();
 
-        console.log(listingFees, " listing fees")
-        let marketTransaction = await marketContract.createVaultItem(mintNftContract, price, tokenId, { value: listingFees })
-        await marketTransaction.wait();
-        router.push("/");
+            console.log(listingFees, " listing fees")
+            let marketTransaction = await marketContract.createVaultItem(mintNftContract, price, tokenId, { value: listingFees })
+            await marketTransaction.wait();
+            router.push("/");
+        }
+        catch (error) {
+            console.log(`Error took place while executing transaction ====> ${error} <<<<=`);
+        }
 
     }
 
@@ -179,17 +184,22 @@ export default function createNft() {
     }
 
     async function mintNFTToKeep(url) {
-        const web3modal = new Web3Modal();
-        const connection = await web3modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer = provider.getSigner();
-        const mintContract = new ethers.Contract(mintNftContract, MintNFTABI, signer);
-        let mintingFees = await mintContract.mintingFees();
+        try {
+            const web3modal = new Web3Modal();
+            const connection = await web3modal.connect();
+            const provider = new ethers.providers.Web3Provider(connection);
+            const signer = provider.getSigner();
+            const mintContract = new ethers.Contract(mintNftContract, MintNFTABI, signer);
+            let mintingFees = await mintContract.mintingFees();
 
-        console.log(`minting fees ${mintingFees}`);
-        let transaction = await mintContract.mintNftToKeep(url, { value: mintingFees })
-        await transaction.wait();
-        router.push("/myNFT");
+            console.log(`minting fees ${mintingFees}`);
+            let transaction = await mintContract.mintNftToKeep(url, { value: mintingFees })
+            await transaction.wait();
+            router.push("/myNFT");
+        }
+        catch (error) {
+            console.log(`Error took place while executing transaction ====> ${error} <<<<=`);
+        }
 
     }
 

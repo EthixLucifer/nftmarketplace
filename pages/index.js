@@ -286,7 +286,7 @@ export default function Home() {
                   weight="bold"
                   className=' justify-center flex  text-transparent text-6xl bg-clip-text bg-gradient-to-t from-blue-700 to-blue-900 '
                 >
-                  Latest Nft's Listed For Sale on Goerli
+                  Latest Nft&apos;s Listed For Sale on Goerli
                 </Text>
                 <Carousel
                   additionalTransfrom={0}
@@ -349,7 +349,7 @@ export default function Home() {
                   {
                     goerNFTList.map((nft, i) => (
 
-                      <div>
+                      <div key={nft.itemId}>
                         <Card.Image
                           css={{ marginLeft: '$1', maxWidth: '5000px' }}
                           key={i}
@@ -399,7 +399,7 @@ export default function Home() {
                   return (
 
 
-                    <Container className='flex justify-center  pb-1 ' >
+                    <Container className='flex justify-center  pb-1 ' key={nft.itemId}>
                       <Grid lg={3}>
                         <Card variant="flat"
                           isHoverable
@@ -498,7 +498,7 @@ export default function Home() {
                   weight="bold"
                   className=' justify-center flex  text-transparent text-6xl bg-clip-text bg-gradient-to-t from-blue-700 to-blue-900 '
                 >
-                  Latest Nft's Listed For Sale on BSC
+                  Latest Nft&apos;s Listed For Sale on BSC
                 </Text>
                 <Carousel
                   additionalTransfrom={0}
@@ -561,7 +561,7 @@ export default function Home() {
                   {
                     bscNFTList.map((nft, i) => (
 
-                      <div>
+                      <div key={nft.itemId}>
                         <Card.Image
                           css={{ marginLeft: '$1', maxWidth: '5000px' }}
                           key={i}
@@ -611,7 +611,7 @@ export default function Home() {
                   return (
 
 
-                    <Container className='flex justify-center  pb-1 ' >
+                    <Container className='flex justify-center  pb-1 ' key={nft.itemId}>
                       <Grid lg={3}>
                         <Card variant="flat"
                           isHoverable
@@ -710,7 +710,7 @@ export default function Home() {
                   weight="bold"
                   className=' justify-center flex  text-transparent text-6xl bg-clip-text bg-gradient-to-t from-blue-700 to-blue-900 '
                 >
-                  Latest Nft's Listed For Sale on PolyGon
+                  Latest Nft&apos;s Listed For Sale on PolyGon
                 </Text>
                 <Carousel
                   additionalTransfrom={0}
@@ -773,7 +773,7 @@ export default function Home() {
                   {
                     polNFTList.map((nft, i) => (
 
-                      <div>
+                      <div key={nft.itemId}>
                         <Card.Image
                           css={{ marginLeft: '$1', maxWidth: '5000px' }}
                           key={i}
@@ -823,7 +823,7 @@ export default function Home() {
                   return (
 
 
-                    <Container className='flex justify-center  pb-1 ' >
+                    <Container className='flex justify-center  pb-1 ' key={nft.itemId}>
                       <Grid lg={3}>
                         <Card variant="flat"
                           isHoverable
@@ -909,6 +909,8 @@ export default function Home() {
       </Container>
 
       {/* Loads nfts from Hardhat Network */}
+      
+      {/* 
 
       <Container xl className='bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 min-h-screen max-w-6xl rounded-2xl'>
         <div className=''>
@@ -922,7 +924,7 @@ export default function Home() {
                   weight="bold"
                   className=' justify-center flex  text-transparent text-6xl bg-clip-text bg-gradient-to-t from-blue-700 to-blue-900 '
                 >
-                  Latest Nft's Listed For Sale
+                  Latest Nft&apos;s Listed For Sale
                 </Text>
                 <Carousel
                   additionalTransfrom={0}
@@ -985,7 +987,7 @@ export default function Home() {
                   {
                     hhNFTList.map((nft, i) => (
 
-                      <div>
+                      <div key={nft.itemId}>
                         <Card.Image
                           css={{ marginLeft: '$1', maxWidth: '5000px' }}
                           key={i}
@@ -1035,7 +1037,7 @@ export default function Home() {
                   return (
 
 
-                    <Container className='flex justify-center  pb-1 ' >
+                    <Container className='flex justify-center  pb-1 ' key={nft.itemId}>
                       <Grid lg={3}>
                         <Card variant="flat"
                           isHoverable
@@ -1119,6 +1121,8 @@ export default function Home() {
 
         </div>
       </Container>
+      
+      */}
 
     </div>
   );

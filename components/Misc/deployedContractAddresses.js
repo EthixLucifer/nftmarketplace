@@ -5,17 +5,26 @@
 
 
 
-// Polygon Addresses 
-// Imagica Market Contract Deployed To Address :::=> 0xe24E6e87805BaDeBCFBaB71B4bD1Eb249F4056B7 <========
-// NFT mint Contract Deployed To Address :::=> 0x811445025CcB726F95Ff4B8D3f672cc69A4cd48D <========
+/*
+ Polygon Addresses 
+
+ Imagica Market Contract Deployed To Address :::=> 0x0B2a3F280369d35aA3E08FBf87cf9a9B099b2ce9 <========
+
+NFT mint Contract Deployed To Address :::=> 0x3a1C851f958d563848249C138C221ab6E941e47C <========
 
 
+Gorli Addresses 
 
-// Gorli Addresses 
-// Imagica Market Contract Deployed To Address :::=> 0xe24E6e87805BaDeBCFBaB71B4bD1Eb249F4056B7 <========
-// NFT mint Contract Deployed To Address :::=> 0x811445025CcB726F95Ff4B8D3f672cc69A4cd48D <========
+ Imagica Market Contract Deployed To Address :::=> 0x0997c3aFab5A8D87F5104196683BA5c5A8FcFe2a <========
 
+NFT mint Contract Deployed To Address :::=> 0xaeEB5948AE372a6797883B436c9cD0f7569DeCE2 <========
 
-// BSC Addresses 
-// Imagica Market Contract Deployed To Address :::=> 0x4Df0BaCC759B04F5B642F3771d3d3cb8bb7306D8 <========
-// NFT mint Contract Deployed To Address :::=> 0xe24E6e87805BaDeBCFBaB71B4bD1Eb249F4056B7 <========
+ 
+
+ BSC Addresses 
+ 
+ Imagica Market Contract Deployed To Address :::=> 0x3106c6d8418B5b2509782A9cE39Bde5a189E4201 <========
+
+NFT mint Contract Deployed To Address :::=> 0xd40078ad821d8b33ed0dEC0Dfac50e2ef8E5f15E <========
+ 
+ */
