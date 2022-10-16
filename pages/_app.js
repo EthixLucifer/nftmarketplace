@@ -4,6 +4,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import theme from "../components/theme";
 import styles from '../styles/globals.css'
 import NavbarCustom from "../components/Navbar";
+import Footer from "../components/Footer"
 
 
 
@@ -15,6 +16,7 @@ function Web3Marketplace({ Component, pageProps }) {
       <NavbarCustom />
 
       <Component {...pageProps} />
+      <Footer />
     </NextUIProvider>
   );
 }
