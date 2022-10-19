@@ -31,6 +31,7 @@ export default function Sell() {
     const [imagicaMarketContractAddress, setimagicaMarketContractAddress] = useState([]);
     const [loadingState, setloadingState] = useState("true");
     const [uiModal, setuiModal] = useState(false);
+    const [errorReason, seterrorReason] = useState([]);
     const router = useRouter();
     useEffect(() => {
 
@@ -392,13 +393,20 @@ export default function Sell() {
                                     //checks in the price of the input is a Nan
                                     else if (isNaN(price)) {
                                         console.log("Input tag in the pricing section is a Non Addressable Number :::::> -_- ", price);
+                                        seterrorReason("Dear User😃 or Potential Recruiter 😇 Please, Just Put Numbers in the Input Field");
                                         setuiModal(true);
                                     }
                                     try {
                                         relistNFT()
                                     }
 
-                                    catch (error) { "something went wrong here is the error ", console.log(error); }
+                                    catch (error) {
+                                        "something went wrong here is the error ", console.log(error);
+
+                                        seterrorReason(error);
+                                        setuiModal(true);
+                                    }
+
 
                                 }
                                 async function relistNFT() {
@@ -508,7 +516,7 @@ export default function Sell() {
                             Welcome to
                         </Text>
                         <Text b size={18}>
-                            🧐 IMAGICA
+                            🧐 IMAGIC ART
                         </Text>
                     </Modal.Header>
                     <Modal.Body>
@@ -525,7 +533,8 @@ export default function Sell() {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Text>Dear User😃 or Potential Recruiter 😇 Please, Just Put Numbers in the Input Field </Text>
+                        <Text> {errorReason}</Text>
+
                     </Modal.Footer>
                 </Modal>
 

@@ -83,7 +83,7 @@ export default function Changenetwork() {
     useEffect(() => {
         changeChain();
         console.log("Selected is", selected);
-        // console.log("Selected value is '", selectedValue,"'");
+        
     }, [selected]);
 
     return (

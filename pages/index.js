@@ -647,7 +647,7 @@ export default function Home() {
                             <Row className="flex justify-center max-w-xs">
 
                               <Text className='font-bold text-white'>
-                                {nft.price} Eth
+                                {nft.price} BNB
                               </Text>
                               <Spacer>
 
@@ -859,7 +859,7 @@ export default function Home() {
                             <Row className="flex justify-center max-w-xs">
 
                               <Text className='font-bold text-white'>
-                                {nft.price} Eth
+                                {nft.price} Matic
                               </Text>
                               <Spacer>
 

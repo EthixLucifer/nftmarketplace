@@ -1,4 +1,4 @@
-
+import Link from "next/link";
 
 const Footer = () => {
     return (
@@ -8,16 +8,24 @@ const Footer = () => {
                     <img src={"/chitra.png"} alt="EthxChain Logo" className="w-40" />
                 </div>
                 <div className="flex flex-1 justify-evenly items-center flex-wrap sm:mt-0 mt-2 w-full">
-                    <a href="/" className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">marketplace</a>
-                    <a href="/myNFT" className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">my nft</a>
-                    <a href="/mintNft" className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">mint nft</a>
+                    <Link href="/" >
+                        <a className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">marketplace </a>
+                    </Link>
+                    <Link href="/" >
+                        <a className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">my nft </a>
+                    </Link>
+                    <Link href="/" >
+                        <a className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">mint nft </a>
+                    </Link>
 
                     {/* <p className="text-gray-800 uppercase text-[20px] text-center mx-2 cursor-pointer">Collections</p> */}
                 </div>
             </div>
             <div className="flex justify-center items-center flex-col ">
                 <p className="text-gray-900 uppercase text-sm text-center">Built by Ethix Jambhulkar</p>
-                <a href="https://www.ethix.live" target="_blank" className="text-gray-900 text-sm text-center">Ethix.live</a>
+                <Link href="https://www.ethix.live" target="_blank" rel="noreferrer" >
+                    <a className="text-gray-900 text-sm text-center"> Ethix.live</a>
+                </Link>
             </div>
             <div className="sm:w-[90%] w-full h-[0.25px] bg-gray-400 mt-2" />
             <div className="sm:w-[90%] w-full flex justify-between items-center mt-3">

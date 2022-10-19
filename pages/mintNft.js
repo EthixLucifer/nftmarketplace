@@ -14,6 +14,7 @@ import MintNFTABI from "../components/ABI/MintNft.json"
 
 import { TransactionDescription } from "@ethersproject/abi";
 import detectEthereumProvider from "@metamask/detect-provider";
+import Changenetwork from "../components/connectNetwork";
 
 
 export default function CreateNft() {
@@ -254,6 +255,9 @@ export default function CreateNft() {
                             onChange={e => setformInput({ ...formInput, description: e.target.value })}
                         />
                     </Row>
+                    <Row className="m-4">
+                        {<Changenetwork />}
+                    </Row>
 
 
                 </Card>
@@ -291,11 +295,11 @@ export default function CreateNft() {
                     </Row>
                     <Button
                         shadow
-                        color="success"
+                        color="error"
                         bordered
-                        size={"md"}
+                        size={""}
                         onPress={setContractAddres}
-                        className="p-2"
+                        className="p-5 "
                     >
                         Refresh Network
 
