@@ -175,6 +175,7 @@ export default function CreateNft() {
         })
 
         try {
+            console.log("Execeuting before the error took place");
             const added = await ipfsClient.add(data);
             // console.log("Added path to the Mint Contract ::::::::::", added.path);
             const url = `https://infura-ipfs.io/ipfs/${added.path}`

@@ -15,7 +15,18 @@ import { goerMintNftContract, goerRpc, goerImagicaMarketContract } from "../comp
 import ImagicaMarketABI from "../components/ABI/ImagicaMarket.json"
 import MintNFTABI from "../components/ABI/MintNft.json"
 
+// const react = require('react');
+// const app = react
+// const cors = require("cors");
+// app.use(cors({ origin: "*", }));
 
+
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+//   });
+  
 
 
 
