@@ -274,7 +274,7 @@ export default function Home() {
 
 
       {/* Loads nfts from the Goerli Network */}
-      <Container xl className='bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 min-h-screen max-w-6xl rounded-2xl'>
+      <Container xl className='bg-transparent min-h-screen max-w-6xl rounded-2xl'>
         <div className=''>
 
           <div className=''>
@@ -486,7 +486,7 @@ export default function Home() {
 
 
       {/* Loads nfts from the BSC Network */}
-      <Container xl className='bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 min-h-screen max-w-6xl rounded-2xl'>
+      <Container xl className='bg-transparent min-h-screen max-w-6xl rounded-2xl'>
         <div className=''>
 
           <div className=''>
@@ -698,7 +698,7 @@ export default function Home() {
 
 
       {/* Loads nfts from the PolyGon Network */}
-      <Container xl className='bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 min-h-screen max-w-6xl rounded-2xl'>
+      <Container xl className='bg-transparent min-h-screen max-w-6xl rounded-2xl'>
         <div className=''>
 
           <div className=''>
